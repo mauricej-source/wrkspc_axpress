@@ -9,8 +9,8 @@ public class OrderDAO {
 
     static
     {
-        listOfProduct.getProductList().add(new Product(1, "apple", 0.60, 141, 1));
-        listOfProduct.getProductList().add(new Product(2, "orange", 0.25, 141, 1));
+        listOfProduct.getProductList().add(new Product(1, "apple", 0.60, 241, 8));
+        listOfProduct.getProductList().add(new Product(2, "orange", 0.25, 342, 6));
     }
      
     public Products getProducts() 
@@ -31,7 +31,9 @@ public class OrderDAO {
         double totalLineCost = 0.00;
         double totalCost = 0.00;
         int offer = 0;
-        
+        int productOfferDivisor = 0;
+        int productOfferMultiplier = 0;
+
         orderReceipt = new OrderTotal();
 
         for (int i = 0; i < listOfProduct.getProductList().size(); i++){
@@ -40,9 +42,12 @@ public class OrderDAO {
             cost = listOfProduct.getProductList().get(i).getCost();
             offer = listOfProduct.getProductList().get(i).getOffer();
 
-            totalLineCost = quantity * cost;
+            productOfferDivisor = Integer.parseInt(Integer.toString(offer).substring(0, 1));
+            productOfferMultiplier = Integer.parseInt(Integer.toString(offer).substring(2, 3));
 
-            lineItem = lineItem + product + " x " + quantity + " @ " + cost + ": " + totalLineCost;
+            totalLineCost = (quantity/productOfferDivisor) * (cost*productOfferMultiplier);
+
+            lineItem = lineItem + product + " x " + quantity + " @ " + cost + " DSCNT-" + offer + ": " + totalLineCost;
             orderReceipt.getLineItems().add(lineItem);
 
             totalCost = Double.sum(totalCost, totalLineCost);
